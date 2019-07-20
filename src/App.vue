@@ -1,28 +1,63 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h1>{{ title }}</h1>
+    <div class="area">
+      <canvas id="canvas"></canvas>
+    </div>
+    <ControlPanel
+      @upload-file="uploadFile"
+    ></ControlPanel>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import ControlPanel from './components/ControlPanel.vue'
 
 export default {
   name: 'app',
+  data: () => {
+    return {
+      title: 'Редактор текстур',
+      file: null
+    }
+  },
   components: {
-    HelloWorld
+    ControlPanel
+  },
+  methods: {
+    uploadFile (file) {
+      const canvas = document.getElementById('canvas')
+      const ctx = canvas.getContext('2d')
+      const img = new Image()
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onloadend = function () {
+        img.src = reader.result
+        console.log([ctx, img, img.src])
+        ctx.drawImage(img, 0, 0, img.width, img.height)
+      }
+      /* img.onload = function () {
+      } */
+      /* console.log(reader.result) */
+    }
   }
 }
 </script>
 
 <style lang="scss">
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  padding: 15px;
+}
+
+.area {
+  margin-bottom: 10px;
+}
+
+#canvas {
+  display: block;
+  margin: auto;
+  border: 2px dashed red;
 }
 </style>
