@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import ControlPanel from './components/ControlPanel.vue'
+import ControlPanel from './components/ControlPanel.vue';
 
 export default {
   name: 'app',
@@ -19,29 +19,31 @@ export default {
     return {
       title: 'Редактор текстур',
       file: null
-    }
+    };
   },
   components: {
     ControlPanel
   },
   methods: {
     uploadFile (file) {
-      const canvas = document.getElementById('canvas')
-      const ctx = canvas.getContext('2d')
-      const img = new Image()
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
+      const canvas = document.getElementById('canvas'),
+        ctx = canvas.getContext('2d'),
+        img = new Image(),
+        reader = new FileReader();
+      reader.readAsDataURL(file);
+      
       reader.onloadend = function () {
-        img.src = reader.result
-        console.log([ctx, img, img.src])
-        ctx.drawImage(img, 0, 0, img.width, img.height)
-      }
+        img.src = reader.result;
+        console.log([ctx, img, img.src]);
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        // console.log('defrf');
+      };
       /* img.onload = function () {
       } */
       /* console.log(reader.result) */
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
