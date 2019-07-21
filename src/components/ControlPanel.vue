@@ -14,7 +14,8 @@
       <div class="col-md-6">
         <button class="btn btn-primary" v-on:click="refresh">Обновить</button>
         &nbsp;
-        <button class="btn btn-success">Сохранить</button>
+        <button class="btn btn-success" v-bind:class="{ disabled: !file }" v-on:click="save">Сохранить</button>
+        &nbsp;
       </div>
     </div>
   </div>
@@ -48,6 +49,11 @@ export default {
       if (fileInput.files[0]) {
         this.file = fileInput.files[0];
         this.$emit('upload-file', this.file);
+      }
+    },
+    save () {
+      if (this.file) {
+        this.$emit('save');
       }
     }
   }

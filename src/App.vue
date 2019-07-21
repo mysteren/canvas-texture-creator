@@ -6,6 +6,7 @@
     </div>
     <ControlPanel
       @upload-file="uploadFile"
+      @save="saveFile"
     ></ControlPanel>
   </div>
 </template>
@@ -33,32 +34,33 @@ export default {
         ctx = canvas.getContext('2d'),
         img = new Image(),
         reader = new FileReader();
-      img.width = 40;
-      img.style.objectFit = 'contain';
-      
+
       canvas.height = 320;
       canvas.width = 320;
 
       reader.readAsDataURL(file);
-      
       reader.onload = () => {
         img.src = reader.result;
         img.onload = () => {
-          // console.log([ctx, img, img.src, img.width, img.height]);
+          let realImgWidth = img.width,
+            realImgHeight = img.height;
+          img.width = 40;
           for (let i = 0; i <= canvas.width; i += img.width) {
-            // let start = ,
-            
             let j = this.getRandomArbitrary(0, -img.height);
-            // elOffset = img.height * 0.5;
             for (; j <= canvas.height;) {
-              let elHeight = this.getRandomArbitrary(canvas.height * 0.25, canvas.height * 0.7);
-              // let eloffset =
-              ctx.drawImage(img, 0, 0, img.width, elHeight, i, j, img.width, elHeight);
+              let k = this.getRandomArbitrary(0.3, 1),
+                elRealHeight = k * realImgHeight,
+                elHeight = elRealHeight * img.width / realImgWidth;
+              ctx.drawImage(img, 0, 1, realImgWidth, elRealHeight, i, j, img.width, elHeight);
               j += elHeight;
             }
           }
         };
       };
+    },
+    saveFile () {
+      const canvas = document.getElementById('canvas');
+      window.location.href = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
     }
   }
 };
