@@ -5,13 +5,15 @@
         <div class="input-group">
           <label class="input-group-btn">
             <span class="btn btn-primary">
-              Открыть файл&hellip; <input type="file" class="file-input" style="display: none;" multiple v-on:change="uploadFile">
+              Открыть файл&hellip; <input type="file" class="file-input" style="display: none;" multiple v-on:input="uploadFile">
             </span>
           </label>
           <input type="text" class="form-control file-name-input" readonly :value="fileName">
         </div>
       </div>
       <div class="col-md-6">
+        <button class="btn btn-primary" v-on:click="refresh">Обновить</button>
+        &nbsp;
         <button class="btn btn-success">Сохранить</button>
       </div>
     </div>
@@ -22,24 +24,34 @@
 export default {
   name: 'ControlPanel',
   props: {
-
+    
   },
   data () {
     return {
-      fileName: null
+      file: null
+    };
+  },
+  computed: {
+    fileName () {
+      if (this.file) {
+        return this.file.name;
+      }
+      return null;
     }
   },
   methods: {
+    refresh () {
+      this.$emit('upload-file', this.file);
+    },
     uploadFile (e) {
-      let fileInput = this.$el.querySelector('.file-input')
-      let file = fileInput.files[0]
-      if (file) {
-        this.fileName = file.name
-        this.$emit('upload-file', file)
+      let fileInput = this.$el.querySelector('.file-input');
+      if (fileInput.files[0]) {
+        this.file = fileInput.files[0];
+        this.$emit('upload-file', this.file);
       }
     }
   }
-}
+};
 </script>
 
 <style lang="scss">
