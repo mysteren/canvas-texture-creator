@@ -5,7 +5,12 @@
         <div class="input-group">
           <label class="input-group-btn">
             <span class="btn btn-primary">
-              Открыть файл&hellip; <input type="file" class="file-input" style="display: none;" multiple v-on:input="uploadFile">
+              Открыть файл&hellip;
+              <input
+                type="file"
+                class="file-input"
+                style="display: none;"
+                multiple v-on:input="uploadFile">
             </span>
           </label>
           <input type="text" class="form-control file-name-input" readonly :value="fileName">
@@ -14,7 +19,12 @@
       <div class="col-md-6">
         <button class="btn btn-primary" v-on:click="refresh">Обновить</button>
         &nbsp;
-        <button class="btn btn-success" v-bind:class="{ disabled: !file }" v-on:click="save">Сохранить</button>
+        <button
+          class="btn btn-success"
+          v-bind:class="{ disabled: !file }"
+          v-on:click="save">
+          Сохранить
+        </button>
         &nbsp;
       </div>
     </div>
@@ -25,38 +35,38 @@
 export default {
   name: 'ControlPanel',
   props: {
-    
+
   },
-  data () {
+  data() {
     return {
-      file: null
+      file: null,
     };
   },
   computed: {
-    fileName () {
+    fileName() {
       if (this.file) {
         return this.file.name;
       }
       return null;
-    }
+    },
   },
   methods: {
-    refresh () {
+    refresh() {
       this.$emit('upload-file', this.file);
     },
-    uploadFile (e) {
-      let fileInput = this.$el.querySelector('.file-input');
+    uploadFile() {
+      const fileInput = this.$el.querySelector('.file-input');
       if (fileInput.files[0]) {
-        this.file = fileInput.files[0];
+        [this.file] = fileInput.files;
         this.$emit('upload-file', this.file);
       }
     },
-    save () {
+    save() {
       if (this.file) {
         this.$emit('save');
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

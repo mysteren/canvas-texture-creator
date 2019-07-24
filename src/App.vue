@@ -16,24 +16,22 @@ import ControlPanel from './components/ControlPanel.vue';
 
 export default {
   name: 'app',
-  data: () => {
-    return {
-      title: 'Редактор текстур',
-      file: null
-    };
-  },
+  data: () => ({
+    title: 'Редактор текстур',
+    file: null,
+  }),
   components: {
-    ControlPanel
+    ControlPanel,
   },
   methods: {
-    getRandomArbitrary (min, max) {
+    getRandomArbitrary(min, max) {
       return Math.random() * (max - min) + min;
     },
-    uploadFile (file) {
-      const canvas = document.getElementById('canvas'),
-        ctx = canvas.getContext('2d'),
-        img = new Image(),
-        reader = new FileReader();
+    uploadFile(file) {
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      const reader = new FileReader();
 
       canvas.height = 320;
       canvas.width = 320;
@@ -42,15 +40,15 @@ export default {
       reader.onload = () => {
         img.src = reader.result;
         img.onload = () => {
-          let realImgWidth = img.width,
-            realImgHeight = img.height;
+          const realImgWidth = img.width;
+          const realImgHeight = img.height;
           img.width = 40;
           for (let i = 0; i <= canvas.width; i += img.width) {
             let j = this.getRandomArbitrary(0, -img.height);
             for (; j <= canvas.height;) {
-              let k = this.getRandomArbitrary(0.3, 1),
-                elRealHeight = k * realImgHeight,
-                elHeight = elRealHeight * img.width / realImgWidth;
+              const k = this.getRandomArbitrary(0.3, 1);
+              const elRealHeight = k * realImgHeight;
+              const elHeight = elRealHeight * img.width / realImgWidth;
               ctx.drawImage(img, 0, 1, realImgWidth, elRealHeight, i, j, img.width, elHeight);
               j += elHeight;
             }
@@ -58,11 +56,11 @@ export default {
         };
       };
     },
-    saveFile () {
+    saveFile() {
       const canvas = document.getElementById('canvas');
       window.location.href = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
-    }
-  }
+    },
+  },
 };
 </script>
 
