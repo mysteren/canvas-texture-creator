@@ -45,7 +45,7 @@
                 v-on:input="uploadFile">
             </span>
           </label>
-          <input type="text" class="form-control file-name-input" readonly :value="fileName">
+          <input type="text" class="form-control file-name-input" readonly :value="fileNames">
         </div>
       </div>
       <div class="col-md-12">
@@ -84,11 +84,19 @@ export default {
     };
   },
   computed: {
-    fileName() {
+    fileNames() {
       /* if (this.files.lenght) {
         return this.files.name;
       } */
-      return null;
+      
+      if (this.files.length) {
+        let result = '';
+        this.files.forEach(function (item) {
+          result += item.name + ', ';
+        });
+        return result.slice(0, -2);
+      }
+      return '';
     },
   },
   methods: {
@@ -107,8 +115,8 @@ export default {
     uploadFile() {
       const fileInput = this.$el.querySelector('.file-input');
       if (fileInput.files.length) {
-        this.files = fileInput.files;
-        this.$emit('upload-file', this.files);
+        this.files = Array.from(fileInput.files);
+        this.$emit('addFiles', Array.from(this.files));
       }
     },
     save() {

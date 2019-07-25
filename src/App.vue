@@ -12,11 +12,14 @@
       @setSize="setSize"
       @setLaying="setLaying"
       @setCropMethod="setCropMethod"
-      @upload-file="uploadFile"
+      @addFiles="addImages"
       @save="saveFile"
     ></ControlPanel>
     <h3>Исходные файлы</h3>
-    <SourcesList></SourcesList>
+    <SourcesList
+      v-bind:images="images"
+      @deleteImage="deleteImage"
+    ></SourcesList>
     <hr>
     <h3>Текстура</h3>
     <ResultTexture></ResultTexture>
@@ -79,7 +82,23 @@ export default {
     setCropMethod(result) {
       this.cropMethod = result;
     },
-    uploadFile(file) {
+    addImages(files) {
+      
+      files.forEach((file) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          this.images.push({
+            name: file.name, 
+            src: reader.result
+          });
+        }
+      });
+    },
+    deleteImage(index) {
+      this.images.splice(index, 1);
+    },
+    /* render(file) {
       const canvas = document.getElementById('canvas');
       const ctx = canvas.getContext('2d');
       const img = new Image();
@@ -107,7 +126,7 @@ export default {
           }
         };
       };
-    },
+    }, */
     saveFile() {
       const canvas = document.getElementById('canvas');
       window.location.href = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
