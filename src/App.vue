@@ -13,6 +13,7 @@
       @setLaying="setLaying"
       @setCropMethod="setCropMethod"
       @addFiles="addImages"
+      @render="renderTexture"
       @save="saveFile"
     ></ControlPanel>
     <h3>Исходные файлы</h3>
@@ -22,9 +23,8 @@
     ></SourcesList>
     <hr>
     <h3>Текстура</h3>
-    <ResultTexture></ResultTexture>
     <div class="area">
-      <canvas id="canvas"></canvas>
+      <canvas id="canvas-texture"></canvas>
     </div>
     <hr>
     <h3>Отображение</h3>
@@ -35,15 +35,15 @@
 <script>
 import ControlPanel from './components/ControlPanel.vue';
 import SourcesList from './components/SourcesList.vue';
-import ResultTexture from './components/ResultTexture.vue';
 import TextureViews from './components/TextureViews.vue';
+import TextureRender from './classes/TextureRender'; 
 
 export default {
   name: 'app',
   data: () => ({
     layingList: [
-      { text: 'Прямой', value: 'straight' },
-      { text: 'Со сдвигом', value: 'offset' },
+      { text: 'Прамая', value: 'straight' },
+      { text: 'Палубная', value: 'offset' },
       { text: 'Елка', value: 'tree' },
     ],
     sizesList: [
@@ -66,7 +66,6 @@ export default {
   components: {
     ControlPanel,
     SourcesList,
-    ResultTexture,
     TextureViews
   },
   methods: {
@@ -90,43 +89,22 @@ export default {
         reader.onload = () => {
           this.images.push({
             name: file.name, 
-            src: reader.result
+            src: reader.result,
           });
-        }
+        };
       });
     },
     deleteImage(index) {
       this.images.splice(index, 1);
     },
-    /* render(file) {
-      const canvas = document.getElementById('canvas');
-      const ctx = canvas.getContext('2d');
-      const img = new Image();
-      const reader = new FileReader();
-
-      canvas.height = 320;
-      canvas.width = 320;
-
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        img.src = reader.result;
-        img.onload = () => {
-          const realImgWidth = img.width;
-          const realImgHeight = img.height;
-          img.width = 40;
-          for (let i = 0; i <= canvas.width; i += img.width) {
-            let j = this.getRandomArbitrary(0, -img.height);
-            for (; j <= canvas.height;) {
-              const k = this.getRandomArbitrary(0.3, 1);
-              const elRealHeight = k * realImgHeight;
-              const elHeight = elRealHeight * img.width / realImgWidth;
-              ctx.drawImage(img, 0, 1, realImgWidth, elRealHeight, i, j, img.width, elHeight);
-              j += elHeight;
-            }
-          }
-        };
-      };
-    }, */
+    
+    renderTexture() {
+      const canvasTexture = document.getElementById('canvas-texture'),
+        render = new TextureRender(canvasTexture, this.laying, this.size, this.cropMethod);
+      // render.setImages(this.images)
+      render.draw(this.images);
+      console.log(render.images);
+    },
     saveFile() {
       const canvas = document.getElementById('canvas');
       window.location.href = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
@@ -143,12 +121,14 @@ export default {
 }
 
 .area {
-  margin-bottom: 10px;
+  margin: 15px;
 }
 
-#canvas {
+#canvas-texture {
   display: block;
   margin: auto;
   border: 1px dashed red;
+  max-width: 100%;
 }
+
 </style>

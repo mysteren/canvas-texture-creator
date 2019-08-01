@@ -13,7 +13,7 @@
       </div>
       <div class="col-lg-4 col-md-6">
         <div class="form-group">
-          <label for="sel1">Тип:</label>
+          <label for="sel1">Укладка:</label>
           <SelectInput
             v-bind:options="layingList"
             v-bind:selected="laying"
@@ -45,11 +45,14 @@
                 v-on:input="uploadFile">
             </span>
           </label>
-          <input type="text" class="form-control file-name-input" readonly :value="fileNames">
+          <input type="text" class="form-control file-name-input " readonly :value="fileNames">
         </div>
       </div>
+      <div class="col-md-12 form-group">
+        <input type="file" accept="image/*" class="file-input-from-camera" capture="camera" v-on:input="uploadFile2">
+      </div>
       <div class="col-md-12">
-        <button class="btn btn-primary" v-on:click="refresh">Обновить</button>
+        <button class="btn btn-primary" v-on:click="render">Генерация</button>
         &nbsp;
         <button
           class="btn btn-success"
@@ -109,11 +112,18 @@ export default {
     setCropMethod(result) {
       this.$emit('setCropMethod', result);
     },
-    refresh() {
-      this.$emit('upload-file', this.files);
+    render() {
+      this.$emit('render', this.files);
     },
     uploadFile() {
       const fileInput = this.$el.querySelector('.file-input');
+      if (fileInput.files.length) {
+        this.files = Array.from(fileInput.files);
+        this.$emit('addFiles', Array.from(this.files));
+      }
+    },
+    uploadFile2() {
+      const fileInput = this.$el.querySelector('.file-input-from-camera');
       if (fileInput.files.length) {
         this.files = Array.from(fileInput.files);
         this.$emit('addFiles', Array.from(this.files));
