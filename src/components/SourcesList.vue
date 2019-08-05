@@ -1,9 +1,9 @@
 <template>
   <div id="sources-list" class="">
     <table class="table">
-      <tr v-for="(image, index) in images" >
+      <tr v-for="(image, index) in images" v-bind:key="index">
         <td class="el">
-          <img :src="image.src" class=""> 
+          <img :src="image.src" class="">
         </td>
         <td>
           <a href="" class="btn btn-sm btn-danger" @click="deleteImage($event, index)">Удалить</a>
@@ -17,14 +17,14 @@
 export default {
   name: 'SourcesList',
   props: [
-    'images'
+    'images',
   ],
   methods: {
     deleteImage(e, index) {
       e.preventDefault();
       this.$emit('deleteImage', index);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -37,21 +37,17 @@ export default {
       position: relative;
       height: 60px;
       width: 75%;
-      
-      //overflow: hidden;
       overflow: hidden;
       img {
         position: absolute;
         top: 1px;
         bottom: 1px;
         left: 0px;
-        //right: 0px;
         max-width: 60px;
         margin: auto;
         transform: rotate(90deg) translateY(-40%);
       }
     }
-    
   }
 
 

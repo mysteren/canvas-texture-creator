@@ -8,8 +8,5 @@ export default class CustomMath {
     static randomArbitrary(min, max) {
         return Math.random() * (max - min) + min;
     }
-
-
-
-
+    
 }

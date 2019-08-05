@@ -28,7 +28,9 @@
     </div>
     <hr>
     <h3>Отображение</h3>
-    <TextureViews></TextureViews>
+    <TextureViews
+      
+    ></TextureViews>
   </div>
 </template>
 
@@ -61,8 +63,13 @@ export default {
     size: 1,
     cropMethod: 'autocorrection',
     images: [],
-
+    canvas: null
   }),
+  mounted: function() {
+
+    this.canvas = document.getElementById('canvas-texture');
+
+  },
   components: {
     ControlPanel,
     SourcesList,
@@ -100,7 +107,7 @@ export default {
     
     renderTexture() {
       const canvasTexture = document.getElementById('canvas-texture'),
-        render = new TextureRender(canvasTexture, this.laying, this.size, this.cropMethod);
+        render = new TextureRender(this.canvas, this.laying, this.size, this.cropMethod);
       // render.setImages(this.images)
       render.draw(this.images);
       console.log(render.images);
